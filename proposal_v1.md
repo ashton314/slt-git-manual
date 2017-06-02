@@ -16,14 +16,19 @@ Git
 
 ### What is Git? ###
 
-Git is a computer program. It's a simple binary like `diff` or `grep` or `find`. Git is not a website. _GitHub_ is a website, and it uses Git to work. We can use Git independent of GitHub.
+Git is a computer program. It's a simple binary like `diff` or `grep` or `find`. Git is not a web site. _GitHub_ is a web site, and it uses Git to work. GitHub lets programmers share their Git repositories. We can use Git independent of GitHub.
 
 Installing Git is as easy as installing any other package. Git is extremely well maintained, and has legendary documentation.
 
-
 ### What does one do with Git? ###
 
-Git lets you maintain control of different versions of your programs. It also lets you colaborate with multiple programmers and still keep your code from getting messy. It lets you see every change you've made to your software and when. (And much more!)
+Git lets you maintain control of different versions of your programs. It also lets you collaborate with multiple programmers and still keep your code from getting messy. It lets you see every change you've made to your software and when. (And much more!)
+
+Having multiple versions of software lets us keep a nice, stable version meant for production. We can have another version for the development environment which, once the code has been proven to be stable and safe, can be merged easily into the production version. (Manually copying files is not easy because we miss things. Running `git merge` and then something like `make deploy-production` is.)
+
+We don't always have multiple programmers on the same project, but when we do, it can get a little hairy. Git lets multiple developers write code without stepping on each other's toes.
+
+Being able to see what changes were made when will *greatly* mitigate emergencies like the one experienced with the _Foundations of Leadership_ application. We solved the problem by using `CMD-z` to roll-back changes until it worked. Obviously, it was extremely fortunate that such history was preserved. Git makes this kind of roll-back easy, safe, and ubiquitous.
 
 #### The master plan ####
 
@@ -61,7 +66,9 @@ For building new projects, this is the flow we would follow:
 
 4. Make build scripts to deploy the code to an environment of our selection.
 
-   Laravel makes deploying to different environmenets extremely easy. With a Makefile, targets like `deploy-dev` and `deploy-prod` can make deployment painless.
+   Laravel makes deploying to different environments extremely easy.
+   
+   With a Makefile, targets like `deploy-dev` and `deploy-prod` can make deployment painless.
 
 ### Why? ###
 
@@ -77,11 +84,11 @@ With Git, we can find the last working version of a piece of code, see the exact
 
 #### Collaboration between multiple programmers is a breeze ####
 
-We don't often work in groups on sites, but Git makes managing this very convienent when we do. See the [Usage example][Usage example] for a little more details on how this is done.
+We don't often work in groups on sites, but Git makes managing this very convenient when we do. See the [Usage example][Usage example] for a little more details on how this is done.
 
 #### Git makes experimenting much safer ####
 
-We have backups, but those are made every night. What happens when we want to try out some drastic changes to code that might break everything if it doesn't work out? Well, in the past, we've made a copy of the directory. That however can get very messy. Plus, if there are *some* things that you liked about your changes, you have to merge those changes in by hand, effectively doubling the amount of work you do. Git manages this for you. You can (and should) create topic *branches* (virutal copies of the project) that can be merged (fully or partially) back into the `master` branch once things are stable.
+We have backups, but those are made every night. What happens when we want to try out some drastic changes to code that might break everything if it doesn't work out? Well, in the past, we've made a copy of the directory. That however can get very messy. Plus, if there are *some* things that you liked about your changes, you have to merge those changes in by hand, effectively doubling the amount of work you do. Git manages this for you. You can (and should) create topic *branches* (virtual copies of the project) that can be merged (fully or partially) back into the `master` branch once things are stable.
 
 #### Git will help us maintain consistency between dev/prod environments ####
 
@@ -94,7 +101,7 @@ The Git repository will become the single source of "truth"---both the developme
 		        \
 			     H---I some_feature (developer branch)
 
-We can merge the `some_feature` branch (name doesn't matter---only the `master` branch name is fixed) developer branch into the `v1` development branch whenver:
+We can merge the `some_feature` branch (name doesn't matter---only the `master` branch name is fixed) developer branch into the `v1` development branch whenever:
 
      A---B master
 	      \
@@ -129,7 +136,7 @@ Before anyone merges into `master` (or we could also say before anyone merges in
 
 #### Branch `master` is always deployable ####
 
-The idea is that the `master` branch *always* contains clean, working code. When we want to test something out, we make a new branch. That way, if we ever need to restore the production environment, we simply pull the copy from the master branch. No hastle.
+The idea is that the `master` branch *always* contains clean, working code. When we want to test something out, we make a new branch. That way, if we ever need to restore the production environment, we simply pull the copy from the master branch. No hassle.
 
 ### Concerns ###
 
@@ -166,7 +173,7 @@ Here's the memory usage on the file:
 	4.0K	drupal/themes
 	267M	drupal
 
-Yes, the git repository (`drupal/.git`) adds 194 Megabytes, but that is litterally the *entire history* of the drupal project. (33,480 commits from 42 contributors over 17 years.) We won't be doing anything nearly that big. My supply tracker/print jobs project by comparison looks like:
+Yes, the git repository (`drupal/.git`) adds 194 Megabytes, but that is literally the *entire history* of the drupal project. (33,480 commits from 42 contributors over 17 years.) We won't be doing anything nearly that big. My supply tracker/print jobs project by comparison looks like:
 
 	$ du -h -d 1 tracker
 	8.3M	tracker/.git
@@ -184,7 +191,7 @@ Yes, the git repository (`drupal/.git`) adds 194 Megabytes, but that is litteral
      40M	tracker/vendor
     197M	tracker
 
-My repository is only 8.3 megs. Our projects will look more like this than the drupal project.
+My repository is only 8.3 megabytes. Our projects will look more like this than the drupal project.
 
 **Conclusion:** even if we were to have a massive project running over several decades, repository size is still extremely reasonable. 
 
@@ -194,7 +201,7 @@ Setting up a Git repository is super easy. Let's say we designate a place on `ay
 
 	$ mkdir repos
 
-Done! So far we only have a directory. What happens when we want to make a new website? Well, we just do this:
+Done! So far we only have a directory. What happens when we want to make a new web site? Well, we just do this:
 
 	$ cd repos; mkdir new_site; cd new_site
 	$ git init --bare
@@ -202,7 +209,7 @@ Done! So far we only have a directory. What happens when we want to make a new w
 
 Now we have a repository for the site. This will function as the "single source of truth" for the site.
 
-Let's say a progammer wants to start working on the site. On their desktop computer, they *clone* the repository:
+Let's say a programmer wants to start working on the site. On their desktop computer, they *clone* the repository:
 
 	$ cd Projects
 	$ git clone programmer@ayeaye.byu.edu:repos/new_site/
@@ -330,7 +337,7 @@ Okay, let's say that some changes sometime in the last week have introduced a bu
 	
 We figure out that the problem is in the file `js/basics.js`. We can see what commits affected this file by running `git log js/basics.js`.
 
-Hector Bitbucket has always been a bit sloppy with his code. We can see what he changed in his commit by runing `git diff 42f607a9 e4b53b1a`: (those strings are the commit tags from the "added a fibbinaci function" and the "added a shout function" commits respectively---just pull off the first few characters from the full commit hash)
+Hector Bitbucket has always been a bit sloppy with his code. We can see what he changed in his commit by running `git diff 42f607a9 e4b53b1a`: (those strings are the commit tags from the "added a fibbinaci function" and the "added a shout function" commits respectively---just pull off the first few characters from the full commit hash)
 
     $ git diff 42f607a9 e4b53b1a
     diff --git a/js/basics.js b/js/basics.js
