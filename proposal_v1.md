@@ -356,3 +356,9 @@ Hector Bitbucket has always been a bit sloppy with his code. We can see what he 
 Hhmmm... looks like he didn't close a single quote in the `shout` function, nor did he end the statement with a semi-colon. We can now fix those changes and see if it works. If it does, we commit the change and push.
 
 Also, we know now to get on Hector's case for committing bad code.
+
+### Further Reading ###
+
+The [git](https://git-scm.com/about/branching-and-merging) main page has some excellent introductory material about what Git is.
+
+The [Wikipedia article](https://en.wikipedia.org/wiki/Git) never fails.
