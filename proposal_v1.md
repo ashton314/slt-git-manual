@@ -40,7 +40,7 @@ This is how we would put these changes into effect:
 
 2. Setup the repository.
 
-   Either we just create a directory for each project, or we install [GitLab][https://about.gitlab.com] on the server, which would provide a nice front-end for managing our repositories. GitLab is like a self-hosted, private version of GitHub. Basically, it's a collection of managed repositories. GitLab has issue tracking features which would give us Job Tracker-like ticket tracking on projects, minus the headache that Job Tracker is.
+   Either we just create a directory for each project, or we install [GitLab](https://about.gitlab.com) on the server, which would provide a nice front-end for managing our repositories. GitLab is like a self-hosted, private version of GitHub. Basically, it's a collection of managed repositories. GitLab has issue tracking features which would give us Job Tracker-like ticket tracking on projects, minus the headache that Job Tracker is.
 
    GitLab integrates with Slack which all the developers are now using. This would let us know if a bug/issue gets assigned to one of us. Note: this is not intended to replace face-to-face interactions, but merely to help us keep a nice TODO list of what needs doing.
 
