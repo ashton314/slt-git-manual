@@ -1,9 +1,53 @@
 Git Manual
 ==========
 
-Here's a diagram of the basic workflow:
+This manual should help get you up to speed on how to use Git at Student Life Technology. If you are new to Git, it is highly recommended that you take 15 minutes right now and do the official Git tutorial [here](https://try.github.io/levels/1/challenges/1).
 
-![Workflow Overview](/Users/programmer/Projects/dev_ops/overview.png)
+Basic concepts
+--------------
+
+A Git repository has multiple "branches". These are like separate copies of the project. There is always one branch called `master`. There can be any number of other branches.
+
+
+
+Desktop Setup
+-------------
+
+This is how to configure your desktop computer so everything works smoothly:
+
+1. Make sure you have Git installed.
+
+2. Make a place for your repos to live.
+    Use a folder called `Projects/` on your desktop machine.
+
+3. Setup username and email.
+	Do this so we know who committed what. You can set the username and password like this: (you don't have to be in a particular folder)
+	
+		$ git config --global user.name "Your Name"
+		$ git config --global user.email "youremail@provider.com"
+
+You should only ever have to do that once. Once you're setup, do the following to get setup with a website:
+
+1. Clone the site.
+	Run `git clone programmer@sltrepo.byu.edu:repos/new_site/`
+
+2. Create your own branch.
+	Do this to keep your changes isolated from everyone else's changes. Give it a descriptive name, starting with your name:
+	
+		$ git branch ashton_new_instructions
+		$ git checkout ashton_new_instructions
+
+Happy hacking!
+
+Practices
+---------
+
+ - At the end of every day, **COMMIT AND PUSH YOUR CODE!!**
+     We don't have backups of the desktop machines. 
+ - Commit often.
+     Even if all you've done is added a few lines of code, commit. You should be committing code multiple times a day. You don't necessarily have to push.
+ - Keep branch `master` clean.
+	 Don't merge into `master` unless you have had your code reviewed, and are sure it is bug-free. We want to keep `master` deployable at all times.
 
 Creating a new website
 ----------------------
@@ -36,44 +80,6 @@ Creating a new website
 		$ cd Projects/
 		$ git clone programmer@sltrepo.byu.edu:repos/my_new_site/
 
-
-Git concepts
-------------
-
-A Git repository has multiple "branches". These are like separate copies of the project. There is always one branch called `master`. There can be any number of other branches.
-
-When you start working on a website, you will need to clone the repository. Create a branch with your name in it. This is your copy of the project.
-
-When someone has made some changes on a branch that you want to incorporate, use `git merge <branchname>` to pull their changes. Most of the time the changes will take place automatically. If you have edited the same section of code, Git will ask you to resolve the conflicts. (Type `git status` to see where the conflicts are.) Once you are done resolving conflicts, you can invoke `git push` to send the merged code back into the central repository.
-
-The repository lives on a separate machine from the development servers. Use `Filezilla` or `rsync` to push your code from your desktop to the server. Using a tool like `make` can automate this process for you. To see a sample Makefile (the thing `make` needs to automate builds) checkout the _Supply Tracker_ project. Currently, the project lives on `ayeaye`.
-
-Desktop Setup
--------------
-
-1. Make sure you have Git installed.
-
-2. Make a place for your repos to live.
-    Use a folder called `Projects/` on your desktop machine.
-
-3. Setup username and email.
-	Do this so we know who committed what. You can set the username and password like this: (you don't have to be in a particular folder)
-	
-		$ git config --global user.name "Your Name"
-		$ git config --global user.email "youremail@provider.com"
-
-4. Clone the site.
-	 Run `git clone programmer@sltrepo.byu.edu:repos/new_site/`
-
-Practices
----------
-
- - At the end of every day, **COMMIT AND PUSH YOUR CODE!!**
-     We don't have backups of the desktop machines. 
- - Commit often.
-     Even if all you've done is added a few lines of code, commit. You should be committing code multiple times a day. You don't necessarily have to push.
- - Keep branch `master` clean.
-	 Don't merge into `master` unless you have had your code reviewed, and are sure it is bug-free. We want to keep `master` deployable at all times.
 
 Workflow
 --------
