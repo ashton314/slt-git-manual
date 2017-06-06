@@ -3,12 +3,14 @@ Git Manual
 
 This manual should help get you up to speed on how to use Git at Student Life Technology. If you are new to Git, it is highly recommended that you take 15 minutes right now and do the official Git tutorial [here](https://try.github.io/levels/1/challenges/1).
 
-Basic concepts
+Basic Concepts
 --------------
 
-A Git repository has multiple "branches". These are like separate copies of the project. There is always one branch called `master`. There can be any number of other branches.
+A *repository* (or *repo* for short) is sort of like a storage space for a single project. Each website at SLT will have its own separate repository. All the repositories are stored on the same server. (TODO: add server name here)
 
+We have some servers intended for code development, which are accessable only from within the office (e.g. `pegleg`) and some which are accessable to everyone. (e.g. `thunderbolt`) These are called `production` and `development` servers respectively. Our central repository lives on neither kind of server.
 
+The Git repository acts as the definitive definition of the source code. If you change something direclty on one of the servers, you have just committed a **GRIEVOUS SIN**!! When we need to add/modify code, we clone the site onto our desktop machine, make the changes, commit our changes, then push from our desktop to the server.
 
 Desktop Setup
 -------------
@@ -26,7 +28,7 @@ This is how to configure your desktop computer so everything works smoothly:
 		$ git config --global user.name "Your Name"
 		$ git config --global user.email "youremail@provider.com"
 
-You should only ever have to do that once. Once you're setup, do the following to get setup with a website:
+*You should only ever have to do that once.* Once you're setup, do the following to get setup with a website:
 
 1. Clone the site.
 	Run `git clone programmer@sltrepo.byu.edu:repos/new_site/`
@@ -49,15 +51,8 @@ Practices
  - Keep branch `master` clean.
 	 Don't merge into `master` unless you have had your code reviewed, and are sure it is bug-free. We want to keep `master` deployable at all times.
 
-Creating a new website
+Creating a New Website
 ----------------------
-
-1. Go to the central repository.
-2. Create a new folder. Name it something intelligently.
-3. Run `git init --bare` to build the site's repository.
-4. Now anyone can run `git clone programmer@sltrepo.byu.edu:/path/to/repo` to get a copy.
-
-### Example ###
 
 1. Go to the central repository.
 
@@ -80,15 +75,57 @@ Creating a new website
 		$ cd Projects/
 		$ git clone programmer@sltrepo.byu.edu:repos/my_new_site/
 
+5. Make a build script. (optional)
+
+	This makes it convenient to push code. If you don't have a build script, you will have to use Filezilla or `rsync` to copy files to the server. (Note: if you're using `rsync`, you're already half way to having a simple build script.)
 
 Workflow
 --------
 
-#### Solo/Fixing an old project ####
+#### Solo Development/Fixing an old project ####
 
+![Single User diagram here]()
 
+1. Clone the source from the central repository.
+
+		$ git clone programmer@sltrepo.byu.edu:repos/my_site
+
+2. Make changes and commit.
+
+		$ emacs index.php
+		(...)
+		$ git add index.php
+		$ git commit -m "changed some stuff in index.php"
+
+3. Make more changes and commit.
+
+		$ emacs index.php
+		(...)
+		$ emacs foo.html
+		(...)
+		$ git add index.php foo.html
+		$ git commit -m "made index.php pull in cool stuff from foo.html"
+
+4. Push changes to central repository.
+
+		$ git pull
+		$ git merge
+
+		(fix merge conflicts, if any)
+
+		$ git push
+
+5. Push from desktop to server.
+
+		$ make deploy
+
+	or something like:
+	
+		$ rynsc -aivz --exclude=.git . programmer@ayeaye.byu.edu:/var/www/my_site/
 
 #### Collaboration ####
+
+![Multi User diagram here]()
 
 Each programmer should have their own development branch for active development. Make sure your name is in the branch so we know who is working on what. For example, if Arthur and Ashton were to be working on the same project, they would do this:
 
@@ -129,8 +166,6 @@ When Arthur has finished a particular feature that Ashton wants to work with, As
 	$ git pull arthur_some_other_feature
 	$ git merge arthur_some_other_feature
 
-
-
 At the end of the day, Arthur and Ashton should commit and push their changes:
 
 	$ git add -A
@@ -143,6 +178,39 @@ These will push changes to the programmer's personal branches. As soon as they a
 	$ git merge arthur_some_other_feature
 	$ git push
 
+#### Build scripts and deploying code ####
+
+Use Filezilla to copy your project from your desktop to the server. Alternatively, you can use build scripts to automate this process.
+
+A build script can make deploying code to a server very convienent. Here's an example build script for the supply tracker/print jobs site, stored in `Makefile`:
+	
+    ## Makefile
+    ## Ashton Wiersdorf
+    ## Started: Fri Jan  6 16:07:52 MST 2017
+    
+    ifeq ($(MODE),production)
+    SERVER = thunderbolt.byu.edu
+    else
+    SERVER = ayeaye.byu.edu
+    endif
+    
+    USER          = programmer
+    PWD           = /var/www/supplytracker/laravel/
+    LOCAL_PWD     = $(HOME)/www
+    EXCLUDE       = .git/ *.sqlite vendor storage .env artisan public/.htaccess database/database.db
+    RSYNC_OPTIONS = $(addprefix --exclude=, $(EXCLUDE)) --delete --no-p --no-t
+    
+    
+    dry-deploy:			# pretends to upload the project
+		rsync -aivz --dry-run --exclude=*~ $(RSYNC_OPTIONS) . $(USER)@$(SERVER):$(PWD)
+    
+    deploy:
+		rsync -aivz --exclude=*~ $(RSYNC_OPTIONS) . $(USER)@$(SERVER):$(PWD)
+		ssh $(USER)@$(SERVER) 'cd $(PWD); php artisan migrate:reset; php artisan migrate'
+
+To deploy, you run `make deploy` in your shell, and `make` uses `rsync` to copy the files onto the server. This only copies files that have been changed. Use what you like; just make sure the code on the server matches the code on your desktop exactly. (Using `rsync` is highly recommended.)
+
+It's also possible to use this build script to deploy to `thunderbolt`, instead of `ayeaye`. Instead of `make deploy`, run `MODE=production make deploy` and `$(SERVER)` will resolve to `thunderbolt.byu.edu` instead of `ayeaye.byu.edu`.
 
 Further Reading
 ---------------
