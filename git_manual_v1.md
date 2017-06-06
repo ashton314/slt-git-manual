@@ -6,11 +6,11 @@ This manual should help get you up to speed on how to use Git at Student Life Te
 Basic Concepts
 --------------
 
-A *repository* (or *repo* for short) is sort of like a storage space for a single project. Each website at SLT will have its own separate repository. All the repositories are stored on the same server. (TODO: add server name here)
+A *repository* (or *repo* for short) is sort of like a storage space for a single project. Each web site at SLT will have its own separate repository. All the repositories are stored on the same server. (TODO: add server name here)
 
-We have some servers intended for code development, which are accessable only from within the office (e.g. `pegleg`) and some which are accessable to everyone. (e.g. `thunderbolt`) These are called `production` and `development` servers respectively. Our central repository lives on neither kind of server.
+We have some servers intended for code development, which are accessible only from within the office (e.g. `pegleg`) and some which are accessible to everyone. (e.g. `thunderbolt`) These are called `production` and `development` servers respectively. Our central repository lives on neither kind of server.
 
-The Git repository acts as the definitive definition of the source code. If you change something direclty on one of the servers, you have just committed a **GRIEVOUS SIN**!! When we need to add/modify code, we clone the site onto our desktop machine, make the changes, commit our changes, then push from our desktop to the server.
+The Git repository acts as the definitive definition of the source code. If you change something directly on one of the servers, you have just committed a **GRIEVOUS SIN**!! When we need to add/modify code, we clone the site onto our desktop machine, make the changes, commit our changes, then push from our desktop to the server.
 
 Desktop Setup
 -------------
@@ -22,13 +22,13 @@ This is how to configure your desktop computer so everything works smoothly:
 2. Make a place for your repos to live.
     Use a folder called `Projects/` on your desktop machine.
 
-3. Setup username and email.
-	Do this so we know who committed what. You can set the username and password like this: (you don't have to be in a particular folder)
+3. Setup user name and email.
+	Do this so we know who committed what. You can set the user name and password like this: (you don't have to be in a particular folder)
 	
 		$ git config --global user.name "Your Name"
 		$ git config --global user.email "youremail@provider.com"
 
-*You should only ever have to do that once.* Once you're setup, do the following to get setup with a website:
+*You should only ever have to do that once.* Once you're setup, do the following to get setup with a web site:
 
 1. Clone the site.
 	Run `git clone programmer@sltrepo.byu.edu:repos/new_site/`
@@ -51,7 +51,7 @@ Practices
  - Keep branch `master` clean.
 	 Don't merge into `master` unless you have had your code reviewed, and are sure it is bug-free. We want to keep `master` deployable at all times.
 
-Creating a New Website
+Creating a New Web site
 ----------------------
 
 1. Go to the central repository.
@@ -121,7 +121,7 @@ Workflow
 
 	or something like:
 	
-		$ rynsc -aivz --exclude=.git . programmer@ayeaye.byu.edu:/var/www/my_site/
+		$ rsync -aivz --exclude=.git . programmer@ayeaye.byu.edu:/var/www/my_site/
 
 #### Collaboration ####
 
@@ -182,7 +182,7 @@ These will push changes to the programmer's personal branches. As soon as they a
 
 Use Filezilla to copy your project from your desktop to the server. Alternatively, you can use build scripts to automate this process.
 
-A build script can make deploying code to a server very convienent. Here's an example build script for the supply tracker/print jobs site, stored in `Makefile`:
+A build script can make deploying code to a server very convenient. Here's an example build script for the supply tracker/print jobs site, stored in `Makefile`:
 	
     ## Makefile
     ## Ashton Wiersdorf
