@@ -1,7 +1,7 @@
 Git Manual
 ==========
 
-This manual should help get you up to speed on how to use Git at Student Life Technology. If you are new to Git, it is highly recommended that you take 15 minutes right now and do the official Git tutorial [here](https://try.github.io/levels/1/challenges/1).
+This manual should help get you up to speed on how to use Git at Student Life Technology. If you are new to Git, it is highly recommended that you take 15 minutes right now and do the official Git tutorial [here](https://try.github.io/levels/1/challenges/1). Read through the tutorial on [this web site](https://www.atlassian.com/git/tutorials/what-is-version-control) as well, at least the "Beginner" section and the "Getting Started" sections.
 
 We use the [feature branch workflow](https://www.atlassian.com/git/tutorials/comparing-workflows#feature-branch-workflow). Go read up on how these work.
 
@@ -14,7 +14,7 @@ We have some servers intended for code development, which are accessible only fr
 
 The Git repository acts as the definitive definition of the source code. If you change something directly on one of the servers, you have just committed a **GRIEVOUS SIN**!! When we need to add/modify code, we clone the site onto our desktop machine, make the changes, commit our changes, then push from our desktop to the server.
 
-Git repositories have multiple branches. The `master` branch should **ALWAYS** contain tested, working code. This makes it easy for us to always have stable code deployable. Do you development work in a separate branch so you do not break the rest of the repository. See [feature branch workflow](https://www.atlassian.com/git/tutorials/comparing-workflows#feature-branch-workflow) for more on how this works.
+Git repositories have multiple *branches*. A branch is like a lightweight copy of the project. There is always a branch called `master`. You can create your own branches (which you should) to work on your changes. This allows you to work without disturbing other people's changes.
 
 Command Summary
 ---------------
@@ -80,32 +80,36 @@ This is how to configure your desktop computer so everything works smoothly:
 3. Setup user name and email.
 	Do this so we know who committed what. You can set the user name and password like this: (you don't have to be in a particular folder)
 	
-		$ git config --global user.name "Your Name"
-		$ git config --global user.email "youremail@provider.com"
+		desktop:~ $ git config --global user.name "Your Name"
+		desktop:~ $ git config --global user.email "youremail@provider.com"
 
 *You should only ever have to do that once.* Once you're setup, do the following to get setup with a web site:
 
 1. Clone the site.
-	Run `git clone programmer@sltrepo.byu.edu:repos/new_site/`
+
+		desktop:~ $ cd Projects/
+		desktop:Projects $ git clone programmer@sltrepo.byu.edu:repos/new_site/
 
 2. Create your own branch.
 	Do this to keep your changes isolated from everyone else's changes. Give it a descriptive name, starting with your name:
 	
-		$ git branch ashton_new_instructions
-		$ git checkout ashton_new_instructions
+		desktop:new_site $ git branch ashton_new_instructions
+		desktop:new_site $ git checkout ashton_new_instructions
 
 Happy hacking!
 
 Practices
 ---------
 
+ - Do you work in your own topic branch.
+	 This is so you can push your changes to the central repository without breaking `master`.
  - At the end of every day, **COMMIT AND PUSH YOUR CODE!!**
-     We don't have backups of the desktop machines. 
+     We don't have backups of the desktop machines. Push your topic branch, **NOT** `master`.
  - Commit often.
      Even if all you've done is added a few lines of code, commit. You should be committing code multiple times a day. You don't necessarily have to push.
  - Keep branch `master` clean.
 	 Don't merge into `master` unless you have had your code reviewed, and are sure it is bug-free. We want to keep `master` deployable at all times.
- - Commit often.
+ - Commit often. Push at the end of the day.
      Yes, it's worth repeating.
 
 Creating a New Web site
@@ -142,7 +146,7 @@ Workflow
 
 #### Solo Development/Fixing an old project ####
 
-![Single User diagram here]()
+![Single User diagram here](file:///Users/programmer/Projects/dev_ops/single_user_diagram.png)
 
 1. Clone the source from the central repository.
 
