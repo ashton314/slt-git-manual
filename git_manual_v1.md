@@ -184,7 +184,7 @@ Workflow
 		
 	(Replace `bug-#042` with the name of your topic branch.)
 	
-6. Repeat steps 3--4.
+6. Repeat steps 3–5.
 
 7. When you are ready to push to production, have someone review your changes.
 
