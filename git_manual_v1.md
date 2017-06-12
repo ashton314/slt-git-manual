@@ -146,7 +146,7 @@ Workflow
 
 #### Solo Development/Fixing an old project ####
 
-![Single User diagram here](single_user_diagram.png)
+![Single User diagram here](images/single_user_diagram.png)
 
 1. Clone the source from the central repository.
 
@@ -190,7 +190,7 @@ Workflow
 
 	Always have someone review your code before you merge into `master`:
 	
-	![One does not simply merge into master]()
+	![One does not simply merge into master](images/one-does-not-simply-one-does-not-simply-merge-into-master.jpg)
 
 	Send someone a message in Slack or just call them over to look at your changes before you merge into `master`. This way we can keep branch `master` clean, and always ready to deploy.
 
@@ -213,7 +213,7 @@ Workflow
 
 #### Collaboration ####
 
-![Multi User diagram here]()
+![Multi User diagram here](images/multi_user_diagram.png)
 
 Each programmer should have their own development branch for active development. Make sure your name is in the branch so we know who is working on what. For example, if Arthur and Ashton were to be working on the same project, they would do this:
 
@@ -324,11 +324,11 @@ The `Makefile` (it needs to be called `Makefile` exactly) lives in the root of t
 Cheat Sheet
 -----------
 
-Here's a nifty cheat sheet. You can download the original [here](https://www.atlassian.com/git/tutorials/atlassian-git-cheatsheet).
+Here's a nifty cheat sheet. Please see the original [here](https://www.atlassian.com/git/tutorials/atlassian-git-cheatsheet). It's lovely.
 
-![Page 1](Cheat sheat)
+![Page 1](images/atlassian-git-cheatsheet.png)
 
-![Page 2](Cheat sheat)
+![Page 2](images/atlassian-git-cheatsheet_pg2.png)
 	
 Further Reading
 ---------------
