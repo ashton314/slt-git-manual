@@ -146,7 +146,7 @@ Workflow
 
 #### Solo Development/Fixing an old project ####
 
-![Single User diagram here](file:///Users/programmer/Projects/dev_ops/single_user_diagram.png)
+![Single User diagram here](single_user_diagram.png)
 
 1. Clone the source from the central repository.
 
