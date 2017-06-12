@@ -266,7 +266,8 @@ These will push changes to the programmer's personal branches. As soon as they a
 	desktop:my_site $ git merge arthur_some_other_feature
 	desktop:my_site $ git push
 
-#### Build scripts and deploying code ####
+Build scripts and deploying code
+--------------------------------
 
 You can Filezilla to copy your project from your desktop to the server. However, it is better if you use some sort of build script to automate this process. If you take the time to make a good build script, we will not have to waste time later figuring out how to deploy your code to different servers. (In case we need to migrate.)
 
@@ -296,6 +297,16 @@ deploy:
 	rsync -aivz --exclude=*~ $(RSYNC_OPTIONS) . $(USER)@$(SERVER):$(PWD)
 	ssh $(USER)@$(SERVER) 'cd $(PWD); php artisan migrate:reset; php artisan migrate'
 ```
+
+*Brief explanation:* The first three lines are comments. The next block makes it so that if you run something like:
+
+	$ MODE=production make deploy
+
+`$(SERVER)` will resolve to `thunderbolt.byu.edu`. Otherwise it will resolve to `ayeaye.byu.edu`. The next lines (starting with `USER`, `PWD`, `EXCLUDE`, `RSYNC_OPTIONS`) are variable declarations.
+
+There are two targets here (`dry-deploy` and `deploy`). When you say `make <target>` on the command line, the commands under the corresponding target will be run.
+
+To run, simply type `make dry-deploy` or `make deploy` on the command line.
 
 Here's an example of how to use:
 
@@ -339,6 +350,6 @@ Here are some resources to help you with using Git:
 
  - [Comparing Workflows](https://www.atlassian.com/git/tutorials/comparing-workflows#feature-branch-workflow)
 
-     We're using something like the "feature branch workflow". This website has some other helpful tutorials.
+     We're using something like the "feature branch workflow". This web site has some other helpful tutorials.
 
  - If you're new to Git, there's a lovely tutorial on Git's main page [here](https://try.github.io/levels/1/challenges/1).
