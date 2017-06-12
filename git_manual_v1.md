@@ -3,6 +3,8 @@ Git Manual
 
 This manual should help get you up to speed on how to use Git at Student Life Technology. If you are new to Git, it is highly recommended that you take 15 minutes right now and do the official Git tutorial [here](https://try.github.io/levels/1/challenges/1).
 
+We use the [feature branch workflow](https://www.atlassian.com/git/tutorials/comparing-workflows#feature-branch-workflow). Go read up on how these work.
+
 Basic Concepts
 --------------
 
@@ -11,6 +13,59 @@ A *repository* (or *repo* for short) is sort of like a storage space for a singl
 We have some servers intended for code development, which are accessible only from within the office (e.g. `pegleg`) and some which are accessible to everyone. (e.g. `thunderbolt`) These are called `production` and `development` servers respectively. Our central repository lives on neither kind of server.
 
 The Git repository acts as the definitive definition of the source code. If you change something directly on one of the servers, you have just committed a **GRIEVOUS SIN**!! When we need to add/modify code, we clone the site onto our desktop machine, make the changes, commit our changes, then push from our desktop to the server.
+
+Git repositories have multiple branches. The `master` branch should **ALWAYS** contain tested, working code. This makes it easy for us to always have stable code deployable. Do you development work in a separate branch so you do not break the rest of the repository. See [feature branch workflow](https://www.atlassian.com/git/tutorials/comparing-workflows#feature-branch-workflow) for more on how this works.
+
+Command Summary
+---------------
+
+ - `git help [command]`
+ 
+	 If you are ever unsure about a Git command, use `git help`. (E.g. `git help log` for help on `git log`.)
+
+ - `git status`
+
+	 Check the status of the repository. See also what files have changed and are ready to be committed.
+
+ - `git log`
+
+	 See the log of merges.
+
+ - `git diff [commit1] [commit2]`
+
+	 See a list of changes between two commits.
+
+ - `git clone [repo]`
+
+	 Clone a repository.
+
+ - `git add [file1] [file2] ...`
+
+	 Add changed files to staging area. (Prepare for commit.)
+
+ - `git commit [-m "<message here>"]`
+
+	 Commit changes added to the staging area with `git add`. If you do not specify a message with the `-m` flag, it will open up a text editor (usually vim or nano, but can be configured to open with emacs (and maybe sublime?)) and prompt you for a message.
+
+ - `git pull [location] [branchname]`
+
+	 Pull changes from `location` on branch `[branchname]`. Default is `origin`. Default branch is the current branch.
+
+ - `git push`
+
+	 Push changes on current branch to repository. You can change where this pushes to. See `git help push`.
+
+ - `git merge [branchname]`
+
+	 Merge changes on `branchname` into current branch.
+
+ - `git branch`
+
+	 Manage branches. With no arguments it shows you what branch you are on and what branches you have on the current repository.
+
+ - `git checkout [-b <new_branch_name>] [existing_branch]`
+
+	 Either switch to an existing branch like `git checkout existing_branch` or create a new branch like `git checkout -b new_branch` and switch to it.
 
 Desktop Setup
 -------------
@@ -50,6 +105,8 @@ Practices
      Even if all you've done is added a few lines of code, commit. You should be committing code multiple times a day. You don't necessarily have to push.
  - Keep branch `master` clean.
 	 Don't merge into `master` unless you have had your code reviewed, and are sure it is bug-free. We want to keep `master` deployable at all times.
+ - Commit often.
+     Yes, it's worth repeating.
 
 Creating a New Web site
 ----------------------
@@ -58,26 +115,27 @@ Creating a New Web site
 
 	Pretend our repository is stored under the home directory of `sltrepo.byu.edu`.
 	
-		$ ssh programmer@sltrepo.byu.edu
-		$ cd repos/
+		desktop:~ $ ssh programmer@sltrepo.byu.edu
+		sltrepo:~ $ cd repos/
 
 2. Create a new folder.
 
-		$ mkdir my_new_site
-		$ cd my_new_site/
+		sltrepo:repos $ mkdir my_new_site
+		sltrepo:repos $ cd my_new_site/
 
 3. Run `git init --bare` to build the site's repository.
 
-		$ git init --bare
+		sltrepo:repos/my_new_site $ git init --bare
 
 4. Go to your desktop and clone.
 
-		$ cd Projects/
-		$ git clone programmer@sltrepo.byu.edu:repos/my_new_site/
+		desktop:~ $ cd Projects/
+		desktop:Projects $ git clone programmer@sltrepo.byu.edu:repos/my_new_site/
 
-5. Make a build script. (optional)
+5. Make a build script.
 
-	This makes it convenient to push code. If you don't have a build script, you will have to use Filezilla or `rsync` to copy files to the server. (Note: if you're using `rsync`, you're already half way to having a simple build script.)
+	A build script is a program meant to automate copying your code from your desktop to the server. See [this section][Build scripts and deploying code] for more information.
+
 
 Workflow
 --------
@@ -88,40 +146,66 @@ Workflow
 
 1. Clone the source from the central repository.
 
-		$ git clone programmer@sltrepo.byu.edu:repos/my_site
+		desktop:Projects $ git clone programmer@sltrepo.byu.edu:repos/my_site
 
-2. Make changes and commit.
+2. Create a topic branch.
 
-		$ emacs index.php
+		desktop:my_site $ git checkout -b bug-#042 master
+	
+	This creates a new branch called `bug-#042` (give it a good name) based off of the `master` branch.
+
+3. Make changes and commit.
+
+		desktop:my_site $ emacs index.php
 		(...)
-		$ git add index.php
-		$ git commit -m "changed some stuff in index.php"
+		desktop:my_site $ git add index.php
+		desktop:my_site $ git commit -m "changed some stuff in index.php"
 
-3. Make more changes and commit.
+4. Make more changes and commit.
 
-		$ emacs index.php
+		desktop:my_site $ emacs index.php
 		(...)
-		$ emacs foo.html
+		desktop:my_site $ emacs foo.html
 		(...)
-		$ git add index.php foo.html
-		$ git commit -m "made index.php pull in cool stuff from foo.html"
+		desktop:my_site $ git add index.php foo.html
+		desktop:my_site $ git commit -m "made index.php pull in cool stuff from foo.html"
 
-4. Push changes to central repository.
+5. Push your topic branch.
 
-		$ git pull
-		$ git merge
+		desktop:my_site $ git push
+
+	On your first push to the main repository, you will need to tell Git where to push to. Just do this:
+	
+		desktop:my_site $ git push --set-upstream origin bug-#042
+		
+	(Replace `bug-#042` with the name of your topic branch.)
+	
+6. Repeat steps 3--4.
+
+7. When you are ready to push to production, have someone review your changes.
+
+	Always have someone review your code before you merge into `master`:
+	
+	![One does not simply merge into master]()
+
+	Send someone a message in Slack or just call them over to look at your changes before you merge into `master`. This way we can keep branch `master` clean, and always ready to deploy.
+
+8. Pull changes from central repository **BEFORE** you try pushing!!
+
+		desktop:my_site $ git checkout master
+		desktop:my_site $ git pull
+
+9. Merge and fix any problems. Commit once changes are complete.
+
+		desktop:my_site $ git merge
 
 		(fix merge conflicts, if any)
 
-		$ git push
+		desktop:my_site $ git commit -m "<merge message here>"
 
-5. Push from desktop to server.
+10. Push changes to central repository.
 
-		$ make deploy
-
-	or something like:
-	
-		$ rsync -aivz --exclude=.git . programmer@ayeaye.byu.edu:/var/www/my_site/
+		desktop:my_site $ git push
 
 #### Collaboration ####
 
@@ -131,30 +215,30 @@ Each programmer should have their own development branch for active development.
 
 (Ashton's side)
 
-    $ git clone programmer@sltrepo.byu.edu:repos/supplytracker/
+    ashton:my_site $ git clone programmer@sltrepo.byu.edu:repos/supplytracker/
         Cloning into 'supplytracker'...
         remote: Counting objects: 1629, done.
         remote: Compressing objects: 100% (1347/1347), done.
         remote: Total 1629 (delta 956), reused 631 (delta 229)
         Receiving objects: 100% (1629/1629), 1.68 MiB | 0 bytes/s, done.
         Resolving deltas: 100% (956/956), done.
-    $ cd supplytracker/
-    $ git branch ashton_new_feature
-    $ git checkout ashton_new_feature
+    ashton:my_site $ cd supplytracker/
+    ashton:my_site $ git branch ashton_new_feature
+    ashton:my_site $ git checkout ashton_new_feature
         Switched to branch 'ashton_new_feature'
 
 (Arthur's side)
 
-    $ git clone programmer@sltrepo.byu.edu:repos/supplytracker/
+    arthur:my_site $ git clone programmer@sltrepo.byu.edu:repos/supplytracker/
         Cloning into 'supplytracker'...
         remote: Counting objects: 1629, done.
         remote: Compressing objects: 100% (1347/1347), done.
         remote: Total 1629 (delta 956), reused 631 (delta 229)
         Receiving objects: 100% (1629/1629), 1.68 MiB | 0 bytes/s, done.
         Resolving deltas: 100% (956/956), done.
-    $ cd supplytracker/
-    $ git branch arthur_some_other_feature
-    $ git checkout arthur_some_other_feature
+    arthur:my_site $ cd supplytracker/
+    arthur:my_site $ git branch arthur_some_other_feature
+    arthur:my_site $ git checkout arthur_some_other_feature
         Switched to branch 'arthur_some_other_feature'
 
 Okay, now Ashton and Arthur each have their own branch. Now, when Ashton changes something, he can commit and push his branch to the server. Arthur can do the same.
@@ -163,26 +247,26 @@ When Arthur has finished a particular feature that Ashton wants to work with, As
 
 (Ashton's side)
 
-	$ git pull arthur_some_other_feature
-	$ git merge arthur_some_other_feature
+	ashton:my_site $ git pull arthur_some_other_feature
+	ashton:my_site $ git merge arthur_some_other_feature
 
 At the end of the day, Arthur and Ashton should commit and push their changes:
 
-	$ git add -A
-	$ git commit -m "notes for tomorrow"
-	$ git push
+	desktop:my_site $ git add -A
+	desktop:my_site $ git commit -m "notes for tomorrow"
+	desktop:my_site $ git push
 
 These will push changes to the programmer's personal branches. As soon as they are ready to pass off a feature, they should review each other's code, then merge with `master` and push:
 
-	$ git checkout master
-	$ git merge arthur_some_other_feature
-	$ git push
+	desktop:my_site $ git checkout master
+	desktop:my_site $ git merge arthur_some_other_feature
+	desktop:my_site $ git push
 
 #### Build scripts and deploying code ####
 
-Use Filezilla to copy your project from your desktop to the server. Alternatively, you can use build scripts to automate this process.
+You can Filezilla to copy your project from your desktop to the server. However, it is better if you use some sort of build script to automate this process. If you take the time to make a good build script, we will not have to waste time later figuring out how to deploy your code to different servers. (In case we need to migrate.)
 
-A build script can make deploying code to a server very convenient. Here's an example build script for the supply tracker/print jobs site, stored in `Makefile`:
+A build script can make deploying code to a server very convenient. Here's an example build script for the supply tracker/print jobs site, stored in `tracker/Makefile`:
 	
     ## Makefile
     ## Ashton Wiersdorf
@@ -196,7 +280,6 @@ A build script can make deploying code to a server very convenient. Here's an ex
     
     USER          = programmer
     PWD           = /var/www/supplytracker/laravel/
-    LOCAL_PWD     = $(HOME)/www
     EXCLUDE       = .git/ *.sqlite vendor storage .env artisan public/.htaccess database/database.db
     RSYNC_OPTIONS = $(addprefix --exclude=, $(EXCLUDE)) --delete --no-p --no-t
     
@@ -208,10 +291,41 @@ A build script can make deploying code to a server very convenient. Here's an ex
 		rsync -aivz --exclude=*~ $(RSYNC_OPTIONS) . $(USER)@$(SERVER):$(PWD)
 		ssh $(USER)@$(SERVER) 'cd $(PWD); php artisan migrate:reset; php artisan migrate'
 
-To deploy, you run `make deploy` in your shell, and `make` uses `rsync` to copy the files onto the server. This only copies files that have been changed. Use what you like; just make sure the code on the server matches the code on your desktop exactly. (Using `rsync` is highly recommended.)
+Here's an example of how to use:
 
-It's also possible to use this build script to deploy to `thunderbolt`, instead of `ayeaye`. Instead of `make deploy`, run `MODE=production make deploy` and `$(SERVER)` will resolve to `thunderbolt.byu.edu` instead of `ayeaye.byu.edu`.
+	desktop:tracker $ make deploy
+	rsync -aivz --exclude=*~ --exclude=.git/ --exclude=*.sqlite --exclude=vendor --exclude=storage --exclude=.env --exclude=artisan --exclude=public/.htaccess --exclude=database/database.db --delete --no-p --no-t . programmer@ayeaye.byu.edu:/var/www/supplytracker/laravel/
+	Enter passphrase for key '/Users/programmer/.ssh/id_rsa':
+	building file list ... done
+	<f..T.... Makefile
+	<f..T.... app/Http/Controllers/PrintJobMasterController.php
+	<f..T.... doc/User_Manual.txt
+	<f..T.... public/elements/print_jobs.html
+	<f..T.... tests/Feature/ExtendedAPITest.php
+	
+	sent 436286 bytes  received 616 bytes  97089.33 bytes/sec
+	total size is 91987271  speedup is 210.54
 
+The `Makefile` (it needs to be called `Makefile` exactly) lives in the root of the project. E.g. if you were to clone the supply tracker project onto your desktop, and were to run `ls -l`, you would see something like this:
+
+	programmer@clwc-prog-4 $ ls -lA
+	total 736
+	-rw-r--r--    1 programmer  staff     619 Apr 25 11:12 .env
+	drwxr-xr-x   16 programmer  staff     544 Jun 12 10:44 .git
+	-rw-r--r--    1 programmer  staff     141 Apr 17 15:02 .gitignore
+	-rw-r--r--    1 programmer  staff    1621 Jun 12 09:47 Makefile
+	-rw-r--r--    1 programmer  staff      90 Apr 14 14:49 README.txt
+	...
+
+Cheat Sheet
+-----------
+
+Here's a nifty cheat sheet. You can download the original [here](https://www.atlassian.com/git/tutorials/atlassian-git-cheatsheet).
+
+![Page 1](Cheat sheat)
+
+![Page 2](Cheat sheat)
+	
 Further Reading
 ---------------
 
