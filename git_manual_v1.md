@@ -272,28 +272,30 @@ You can Filezilla to copy your project from your desktop to the server. However,
 
 A build script can make deploying code to a server very convenient. Here's an example build script for the supply tracker/print jobs site, stored in `tracker/Makefile`:
 	
-    ## Makefile
-    ## Ashton Wiersdorf
-    ## Started: Fri Jan  6 16:07:52 MST 2017
-    
-    ifeq ($(MODE),production)
-    SERVER = thunderbolt.byu.edu
-    else
-    SERVER = ayeaye.byu.edu
-    endif
-    
-    USER          = programmer
-    PWD           = /var/www/supplytracker/laravel/
-    EXCLUDE       = .git/ *.sqlite vendor storage .env artisan public/.htaccess database/database.db
-    RSYNC_OPTIONS = $(addprefix --exclude=, $(EXCLUDE)) --delete --no-p --no-t
-    
-    
-    dry-deploy:			# pretends to upload the project
-		rsync -aivz --dry-run --exclude=*~ $(RSYNC_OPTIONS) . $(USER)@$(SERVER):$(PWD)
-    
-    deploy:
-		rsync -aivz --exclude=*~ $(RSYNC_OPTIONS) . $(USER)@$(SERVER):$(PWD)
-		ssh $(USER)@$(SERVER) 'cd $(PWD); php artisan migrate:reset; php artisan migrate'
+```makefile
+## Makefile
+## Ashton Wiersdorf
+## Started: Fri Jan  6 16:07:52 MST 2017
+
+ifeq ($(MODE),production)
+SERVER = thunderbolt.byu.edu
+else
+SERVER = ayeaye.byu.edu
+endif
+
+USER          = programmer
+PWD           = /var/www/supplytracker/laravel/
+EXCLUDE       = .git/ *.sqlite vendor storage .env artisan public/.htaccess database/database.db
+RSYNC_OPTIONS = $(addprefix --exclude=, $(EXCLUDE)) --delete --no-p --no-t
+
+
+dry-deploy:			# pretends to upload the project
+	rsync -aivz --dry-run --exclude=*~ $(RSYNC_OPTIONS) . $(USER)@$(SERVER):$(PWD)
+
+deploy:
+	rsync -aivz --exclude=*~ $(RSYNC_OPTIONS) . $(USER)@$(SERVER):$(PWD)
+	ssh $(USER)@$(SERVER) 'cd $(PWD); php artisan migrate:reset; php artisan migrate'
+```
 
 Here's an example of how to use:
 
@@ -321,14 +323,14 @@ The `Makefile` (it needs to be called `Makefile` exactly) lives in the root of t
 	-rw-r--r--    1 programmer  staff      90 Apr 14 14:49 README.txt
 	...
 
-Cheat Sheet
------------
+<!-- Cheat Sheet -->
+<!-- ----------- -->
 
-Here's a nifty cheat sheet. Please see the original [here](https://www.atlassian.com/git/tutorials/atlassian-git-cheatsheet). It's lovely.
+<!-- Here's a nifty cheat sheet. Please see the original [here](https://www.atlassian.com/git/tutorials/atlassian-git-cheatsheet). It's lovely. -->
 
-![Page 1](images/atlassian-git-cheatsheet.png)
+<!-- ![Page 1](images/atlassian-git-cheatsheet.png) -->
 
-![Page 2](images/atlassian-git-cheatsheet_pg2.png)
+<!-- ![Page 2](images/atlassian-git-cheatsheet_pg2.png) -->
 	
 Further Reading
 ---------------
